@@ -1,6 +1,9 @@
 # Add `~/bin` to the `$PATH`
 export PATH="$HOME/bin:$PATH";
 
+# Add python bins aws to the PATH
+export PATH="$HOME/Library/Python/2.7/bin/:$PATH";
+
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
@@ -46,3 +49,44 @@ complete -W "NSGlobalDomain" defaults;
 
 # Add `killall` tab completion for common apps
 complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
+#[ -n "$PS1" ] && source ~/.bash_profile;
+
+sp(){
+    SP_ARG=$1
+    
+    if [ -n "$SP_ARG" ]; then
+        CHECK_PROFILE=`grep "\[$SP_ARG\]" ~/.aws/credentials`
+        if [ -n "$CHECK_PROFILE" ]; then
+            echo "Setting AWS profile to $SP_ARG";
+            export AWS_PROFILE=$SP_ARG
+        else
+            echo "AWS profile $1 does not exist"
+        fi
+    else
+        echo "Setting AWS profile to NULL";
+        export AWS_PROFILE=''
+    fi
+    
+}
+
+cap(){
+    echo "Current AWS profile is set to: $AWS_PROFILE"
+}
+
+function ansible-tunnel-poc {
+    /usr/bin/open -a "/Applications/Google Chrome.app" 'https://localhost:9991/#/login'
+    ssh -N -A \
+    -L 9991:11.223.4.21:443 \
+    -L 8081:11.223.4.21:8081 \
+    -L 2222:11.223.4.21:22 \
+    ec2-user@proxy01-poc
+}
+
+function ansible-tunnel-cd {
+    /usr/bin/open -a "/Applications/Google Chrome.app" 'https://localhost:9992/#/login'
+    ssh -N -A \
+    -L 9992:11.233.64.20:443 \
+    -L 8082:11.233.64.20:8081 \
+    -L 2223:11.233.64.20:22 \
+    ec2-user@proxy01-cd
+}
