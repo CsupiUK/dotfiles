@@ -51,9 +51,9 @@ complete -W "NSGlobalDomain" defaults;
 complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
 #[ -n "$PS1" ] && source ~/.bash_profile;
 
-sp(){
+awsprofile(){
     SP_ARG=$1
-    
+
     if [ -n "$SP_ARG" ]; then
         CHECK_PROFILE=`grep "\[$SP_ARG\]" ~/.aws/credentials`
         if [ -n "$CHECK_PROFILE" ]; then
@@ -66,7 +66,7 @@ sp(){
         echo "Setting AWS profile to NULL";
         export AWS_PROFILE=''
     fi
-    
+
 }
 
 cap(){
@@ -76,17 +76,9 @@ cap(){
 function ansible-tunnel-poc {
     /usr/bin/open -a "/Applications/Google Chrome.app" 'https://localhost:9991/#/login'
     ssh -N -A \
-    -L 9991:11.223.4.21:443 \
-    -L 8081:11.223.4.21:8081 \
-    -L 2222:11.223.4.21:22 \
+#	uncomment and insert private IP for your aws instance
+#    -L 9991:<private ip>:443 \
+#    -L 8081:<private ip>:8081 \
+#    -L 2222:<private ip>:22 \
     ec2-user@proxy01-poc
-}
-
-function ansible-tunnel-cd {
-    /usr/bin/open -a "/Applications/Google Chrome.app" 'https://localhost:9992/#/login'
-    ssh -N -A \
-    -L 9992:11.233.64.20:443 \
-    -L 8082:11.233.64.20:8081 \
-    -L 2223:11.233.64.20:22 \
-    ec2-user@proxy01-cd
 }
